@@ -23,7 +23,8 @@ setup(
             'talker = taller3.robot_manipulador_teleop:main',
             'listener = taller3.robot_manipulador_control:main',
             'pos = taller3.robot_manipulador_pos:main',
-            'interfaz = taller3.robot_manipulador_interfaz:main'
+            'interfaz = taller3.robot_manipulador_interfaz:main',
+            'planner = taller3.robot_manipulador_planner:main',
         ],
     },
 )

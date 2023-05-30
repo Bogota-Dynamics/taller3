@@ -45,7 +45,7 @@ class PositionPublisher(Node):
 
     def posicionManipulador(self):
         
-        ang1 = self.angulo1*pi/180
+        ang1 = -self.angulo1*pi/180
         ang2 = (self.angulo2-90)*pi/180
 
 

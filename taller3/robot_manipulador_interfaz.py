@@ -110,7 +110,8 @@ class TurtleBotInterface(Node):
         nuevas = self.cordenates(msg.linear.x, msg.linear.y)
         if self.pos_actual != nuevas:
             pygame.draw.line(self.screen, (60,179,113), self.pos_actual,nuevas,5)
-            print(self.pos_actual, "-", nuevas)
+            # draw a point at nuevas
+            pygame.draw.circle(self.screen, (60,179,113), nuevas, 5)
             pygame.display.update()
             self.pos_actual = nuevas
             #self.get_logger().info(f"Coordenadas: [{nuevas[0]}]")
@@ -119,13 +120,13 @@ class TurtleBotInterface(Node):
 
     def cordenates(self,linearx,lineary):
         if linearx>0:
-            x = 275-linearx*10
+            x = 275+linearx*10
         else:
-            x = 275-linearx*10
+            x = 275+linearx*10
         if lineary>0:
-            y = 400-lineary*10
+            y = 400+lineary*10
         else:
-            y = 400-lineary*10
+            y = 400+lineary*10
         return (x,y)
         
 def tk_open_dialog_thread(interface:TurtleBotInterface):
