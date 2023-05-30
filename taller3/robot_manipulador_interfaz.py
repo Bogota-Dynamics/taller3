@@ -24,7 +24,7 @@ class TurtleBotInterface(Node):
         self.client2 = self.create_client(SaveMotions, 'recreate_motion')
 
         #Definicion de variables
-        self.pos_actual = [275,300]
+        self.pos_actual = [275,400-27.1]
         self.coords = []
         self.background_color = (255,255,255)
 
@@ -107,9 +107,10 @@ class TurtleBotInterface(Node):
             mkmtThread.start()
 
         #Dibujar el camino robot
-        if self.pos_actual != (msg.linear.x, msg.linear.y):
-            nuevas = self.cordenates(msg.linear.x, msg.linear.y)
+        nuevas = self.cordenates(msg.linear.x, msg.linear.y)
+        if self.pos_actual != nuevas:
             pygame.draw.line(self.screen, (60,179,113), self.pos_actual,nuevas,5)
+            print(self.pos_actual, "-", nuevas)
             pygame.display.update()
             self.pos_actual = nuevas
             #self.get_logger().info(f"Coordenadas: [{nuevas[0]}]")
@@ -118,15 +119,15 @@ class TurtleBotInterface(Node):
 
     def cordenates(self,linearx,lineary):
         if linearx>0:
-            x = 275+linearx*100
+            x = 275-linearx*10
         else:
-            x = 275+linearx*100
+            x = 275-linearx*10
         if lineary>0:
-            y = 300-lineary*100
+            y = 400-lineary*10
         else:
-            y = 300-lineary*100
+            y = 400-lineary*10
         return (x,y)
-
+        
 def tk_open_dialog_thread(interface:TurtleBotInterface):
     file_path = filedialog.asksaveasfilename(
         defaultextension=".png",
