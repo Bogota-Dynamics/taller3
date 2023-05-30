@@ -24,30 +24,33 @@ class RobotManipulatorPlanner(Node):
         
         x = msg.x
         y = msg.y
-        z = 0
+        z = msg.z
 
-        theta3 = 0
+        a1 = 0.122  
+        a2 = 0.149 
 
-        a1 = 12.2  
-        a2 = 14.9 
 
-        """costheta2 = (1/(2*a1*a2))*(((x**2)*(y**2))-((a1**2)+a2**2))
+        costheta2 = (1/(2*a1*a2))*(((x**2)*(y**2))-((a1**2)+a2**2))
         sentheta2 = math.sqrt(1-(costheta2**2))
 
         costheta1 = (1/((x**2)+(y**2)))*(x*(a1+a2*costheta2)+y*a2*math.sqrt(1-(costheta2**2)))
-        sentheta1 = (1/((x**2)+(y**2)))*(y*(a1+a2*costheta2)+x*a2*math.sqrt(1-(costheta2**2)))"""
+        sentheta1 = (1/((x**2)+(y**2)))*(y*(a1+a2*costheta2)+x*a2*math.sqrt(1-(costheta2**2)))
+
 
         r = math.sqrt(x**2 + y**2)
 
         cos_theta2 = (r**2 - a1**2 - a2**2) / (2 * a1 * a2)
-        print(cos_theta2)
         sin_theta2 = math.sqrt(1 - cos_theta2**2)
 
         theta2 = math.atan2(sin_theta2, cos_theta2)
         theta1 = math.atan2(y, x) - math.atan2(a2 * sin_theta2, a1 + a2 * cos_theta2)
 
+
+
+
+
+
         mensaje = f'{theta1},{theta2},{theta3}'
-        print(mensaje)
 
         self.write(mensaje)
 
