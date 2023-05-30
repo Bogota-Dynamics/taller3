@@ -99,20 +99,39 @@ void loop() {
 
   //Mover los servos dependiendo del input
 
-  if (servo_control1 != 0){
+  if (servo_control1 =1 || servo_control1 = -1){
     servo_pos1 = servo_pos1 + servo_control1;
     servo1.write(servo_pos1);
     }
 
-  if (servo_control2 != 0){
+  if (servo_control1 =1 || servo_control2 = -1){
     servo_pos2 = servo_pos2 + servo_control2;
     servo2.write(servo_pos2);
     }
 
   if (servo_control3 != 0){
-    servo_pos3 = servo_pos3 + servo_control3;
-    servo3.write(servo_pos3);
-    
+    if(servo_control3 >0){
+      servo3.write(rightVal);
+    stopTime = msRightSpin*numLaps;
+      }
+    else if(servo_control3<0){
+        servo3.write(leftVal);
+        stopTime = msLeftSpin*numLaps;
+      }  
+
+     else{
+      servo3.write(stopVal);
+      }
+  }
+
+  if (servo_control1 > 1 || servo_control1 < -1)
+  {
+    servo1.write(servo_control1)
+  }
+
+    if (servo_control2 > 1 || servo_control2 < -1)
+  {
+    servo1.write(servo_control2)
   }
 
 
