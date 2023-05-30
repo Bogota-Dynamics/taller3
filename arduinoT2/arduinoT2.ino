@@ -68,7 +68,7 @@ void setup() {
 }
 
 void loop() {
-      
+
   //Recibir y parsear los controles
   if (Serial.available() > 0) {
 
@@ -85,52 +85,34 @@ void loop() {
       valueIndex++; // increment the index to parse the next float
     }
   }
-  
+
   values[valueIndex] = atoi(inputString.c_str()); // parse the final float in the input string
 
   // destructure
   servo_control1 = values[0];
   servo_control2 = values[1];
   servo_control3 = values[2];
-    
+
   }
 
-  
+
+
   //Mover los servos dependiendo del input
 
-  if (servo_control1 ==1 || servo_control1 == -1){
+  if (servo_control1 != 0){
     servo_pos1 = servo_pos1 + servo_control1;
     servo1.write(servo_pos1);
     }
 
-  if (servo_control2 == 1 || servo_control2 == -1){
+  if (servo_control2 != 0){
     servo_pos2 = servo_pos2 + servo_control2;
     servo2.write(servo_pos2);
     }
 
   if (servo_control3 != 0){
-    if(servo_control3 >0){
-      servo3.write(rightVal);
-    stopTime = msRightSpin*numLaps;
-      }
-    else if(servo_control3<0){
-        servo3.write(leftVal);
-        stopTime = msLeftSpin*numLaps;
-      }  
+    servo_pos3 = servo_pos3 + servo_control3;
+    servo3.write(servo_pos3);
 
-     else{
-      servo3.write(stopVal);
-      }
-  }
-
-  if (servo_control1 > 1 || servo_control1 < -1)
-  {
-    servo1.write(servo_control1);
-  }
-
-    if (servo_control2 > 1 || servo_control2 < -1)
-  {
-    servo1.write(servo_control2);
   }
 
 
@@ -140,8 +122,8 @@ void loop() {
   dtostrf(servo_pos2, 5, 2, buffer);
   String cadena2 = String(buffer);
 
-  
-  
+
+
   hola1 = cadena1 +"," +cadena2;
 
 
@@ -154,5 +136,5 @@ void loop() {
 
 
   delay(10);
-    
+
 }
