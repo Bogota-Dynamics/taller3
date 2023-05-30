@@ -42,8 +42,8 @@ class RobotManipulatorPlanner(Node):
         cos_theta2 = (r**2 - a1**2 - a2**2) / (2 * a1 * a2)
         sin_theta2 = math.sqrt(1 - cos_theta2**2)
 
-        theta2 = math.atan2(sin_theta2, cos_theta2)
-        theta1 = math.atan2(y, x) - math.atan2(a2 * sin_theta2, a1 + a2 * cos_theta2)
+        theta2 = math.atan2(sin_theta2, cos_theta2)*(180/math.pi)
+        theta1 = (math.atan2(y, x) - math.atan2(a2 * sin_theta2, a1 + a2 * cos_theta2))*(180/math.pi)
 
 
 
