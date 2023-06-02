@@ -4,6 +4,8 @@ import serial.tools.list_ports
 import math
 from rclpy.node import Node
 from geometry_msgs.msg import Vector3
+from scipy.optimize import fsolve
+
 
 class RobotManipulatorPlanner(Node):
     def __init__(self):
@@ -14,36 +16,50 @@ class RobotManipulatorPlanner(Node):
             self.goal_callback,
             10
         )
-        #Encontrar puerto Automaticamente
+        # Encontrar puerto automáticamente
         ports = list(serial.tools.list_ports.comports())
         arduino_port = ports[0].device
 
-        self.arduino = serial.Serial(port=arduino_port, baudrate=250000,timeout=.1)
+        self.arduino = serial.Serial(port=arduino_port, baudrate=250000, timeout=.1)
     
     def goal_callback(self, msg):
-        
-        x = msg.x
-        y = msg.y
-        z = 0
+        target_x = msg.x 
+        target_y = msg.y 
+        z = msg.z
 
-        theta3 = 0
+        L1 = 12.2
+        L2 = 15
 
-        a1 = 12.2  
-        a2 = 14.9 
+        # Calculate the distance from the origin to the target point
+        distance = math.sqrt(target_x**2 + target_y**2)
 
-        """costheta2 = (1/(2*a1*a2))*(((x**2)*(y**2))-((a1**2)+a2**2))
-        sentheta2 = math.sqrt(1-(costheta2**2))
+        # Check if the target point is reachable
+        if distance > L1 + L2:
+            print("Target point is out of reach")
+            return None
 
-        costheta1 = (1/((x**2)+(y**2)))*(x*(a1+a2*costheta2)+y*a2*math.sqrt(1-(costheta2**2)))
-        sentheta1 = (1/((x**2)+(y**2)))*(y*(a1+a2*costheta2)+x*a2*math.sqrt(1-(costheta2**2)))"""
+        # Calculate the angle between the line connecting the origin and the target point
+        # and the line connecting the origin and the intersection point of the two links
+        alpha = math.acos((L1**2 + distance**2 - L2**2) / (2 * L1 * distance))
 
-        r = math.sqrt(x**2 + y**2)
+        # Calculate the angle between the line connecting the target point and the intersection point
+        # and the line connecting the target point and the x-axis
+        beta = math.atan2(target_y, target_x)
 
-        cos_theta2 = (r**2 - a1**2 - a2**2) / (2 * a1 * a2)
-        sin_theta2 = math.sqrt(1 - cos_theta2**2)
+        # Calculate the joint angles
+        theta1 = math.fabs(alpha-beta)
+        theta2 = math.pi - math.acos((L1**2 + L2**2 - distance**2) / (2 * L1 * L2))
 
-        theta2 = (math.atan2(sin_theta2, cos_theta2))*180/math.pi
-        theta1 = (math.atan2(y, x) - math.atan2(a2 * sin_theta2, a1 + a2 * cos_theta2))*180/math.pi
+        # Convert the angles to degrees
+        theta1 = math.degrees(theta1)
+        theta2 = math.degrees(theta2) + 90
+
+
+        theta3=0
+
+        x1 = L1 * math.cos(math.radians(theta1)) + L2 * math.cos(math.radians(theta1 + theta2))
+        y1 = L1 * math.sin(math.radians(theta1)) + L2 * math.sin(math.radians(theta1 + theta2))
+        print(x1,y1)
 
         mensaje = f'{theta1},{theta2},{theta3}'
         print(mensaje)
@@ -56,8 +72,6 @@ class RobotManipulatorPlanner(Node):
         print("Done")
 
 
-
-       
 def main(args=None):
     rclpy.init(args=args)
     robot_manipulator_planner = RobotManipulatorPlanner()
