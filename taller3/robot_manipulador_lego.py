@@ -12,7 +12,7 @@ class RobotManipulatorPlanner(Node):
         super().__init__('robot_manipulator_planner')
         self.subscription = self.create_subscription(
             Vector3,
-            '/robot_manipulator_zone',
+            '/robot_manipulator_goal',
             self.goal_callback,
             10
         )
@@ -27,9 +27,13 @@ class RobotManipulatorPlanner(Node):
         target_y = msg.y 
         z = msg.z
 
+        theta1 =1
+        theta2 = 0
+        theta3 =0
+
 
         
-        mensaje = 1
+        mensaje = f'{theta1},{theta2},{theta3}'
 
         self.write(mensaje)
 
